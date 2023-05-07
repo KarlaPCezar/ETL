@@ -1,0 +1,25 @@
+Valor_Contabil = if(LEFT(contabil[conta_contabil],11)="111.111.004",contabil[valor],if(LEFT(contabil[conta_contabil],11)="111.111.005",contabil[valor],
+if(LEFT(contabil[conta_contabil],11)="111.111.006",contabil[valor],contabil[valor]*-1)))
+
+
+Resultado = if(contabil[Valor_Contabil]<-1,"Despesa","Receita")
+
+Ano = YEAR(contabil[data_lanc]) 
+
+
+Mês = upper(FORMAT(contabil[data_lanc],"MMM"))
+
+= Odbc.DataSource("dsn=bdteste", [HierarchicalNavigation=true])
+
+dbteste_Database{[Name="contabil",Kind="Table"]}[Data]
+
+= dbteste_Database{[Name="contabil",Kind="Table"]}[Data]
+
+= Table.SelectRows(contabil_Table, each ([conta_contabil] = "111.111.004 - Receita Software1" or [conta_contabil] = "111.111.005 - Receita Software2" 
+or [conta_contabil] = "111.111.006 - Receita Software3"))
+
+= Table.RemoveColumns(#"Linhas Filtradas",{"centro_custo"})
+
+= Table.RenameColumns(#"Colunas Removidas1",{{"historico", "Cleintes"}})
+
+= Table.RemoveColumns(#"Colunas Renomeadas1",{"data_lanc", "valor", "conta_contabil"})
